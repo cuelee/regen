@@ -1,6 +1,9 @@
 #!/bin/bash
-group="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/02_inputs/autoimmune"
-outname="autoimmune"
+	
+result_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/result"
+outname="neuroticism"
+group="$result_dir/01_input/$outname"
+
 bash /home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/codes/01_create_folders.bash $group 
 bash /home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/codes/02_0_intercept_extractor.sh $group 
 bash /home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/codes/03_0_run_LDSC_cor.bash $group

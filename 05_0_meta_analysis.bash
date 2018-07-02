@@ -2,29 +2,13 @@
 
 ## set parameters
 input_dir="$1.rst"
-pprev_file="$1.pprev"
-sprev_file="$1.sprev"
-work_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/cue-work"
-meta_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/meta-work"
+data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
+work_dir="$data_dir/02_intcorr"
+meta_dir="$data_dir/04_FE_inputs"
 ldsc_dir="/media/cuelee/cue_workspace/software/ldsc"
-code_dir="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/codes"
-backup_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/backup_data"
+code_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/codes"
 
-pprevs=""
-while IFS='' read -r line || [[ -n "$line" ]]; do
-        pprevs="${pprevs}${line}";
-	pprevs="${pprevs},";
-done < $pprev_file
-pprevs=${pprevs%,}
-echo $pprevs
-
-sprevs=""
-while IFS='' read -r line || [[ -n "$line" ]]; do
-        sprevs="${sprevs}${line}";
-        sprevs="${sprevs},";
-done < $sprev_file
-sprevs=${sprevs%,}
-echo $sprevs
+mkdir -p $meta_dir
 
 cur_list=""
 while read -r trait
@@ -38,7 +22,7 @@ echo $cur_list
 module load python/python3.6.5
 
 python3 $code_dir/05_1_data_preprocessing.py $work_dir ${cur_list}
-python3 $code_dir/05_2_FE_framework.py $ldsc_dir $work_dir $meta_dir ${cur_list} ${pprevs} ${sprevs} 
+python3 $code_dir/05_2_FE_framework.py $ldsc_dir $work_dir $meta_dir ${cur_list} 
 module unload python/python3.6.5
 
 

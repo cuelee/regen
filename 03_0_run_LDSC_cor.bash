@@ -2,26 +2,15 @@
 
 ## define parameters
 input_dir="$1.rst"
-pprev_file="$1.pprev"
-sprev_file="$1.sprev"
-output_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/cue-work"
+data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
+intcorr_dir="$data_dir/02_intcorr"
+output_dir="$data_dir/03_genetic_corr"
+software_dir="/media/cuelee/cue_workspace/software/ldsc"
 
-i=0
-while IFS='' read -r line || [[ -n "$line" ]]; do
-        pprevs[i]=$line;
-        i=$(expr $i + 1)
-done < $pprev_file
-echo ${pprevs[@]}
+## mkdir
+mkdir -p $output_dir
 
-i=0
-while IFS='' read -r line || [[ -n "$line" ]]; do
-        sprevs[i]=$line;
-        i=$(expr $i + 1)
-done < $sprev_file
-echo ${sprevs[@]}
-
-
-## need use anaconda env
+## Load ldsc python environment using anaconda
 source /home/cuelee/anaconda2/bin/activate ldsc
 
 for filename in "${input_dir}"
@@ -34,7 +23,8 @@ echo "Input:" $filename
 	while read -r trait
 	do
 	
-		list_array[i]=$output_dir/$trait".intCorrected.sumstats.gz"
+		list_array_in[i]=$intcorr_dir/$trait".intCorrected.sumstats.gz"
+		list_array_out[i]=$output_dir/$trait".intCorrected.sumstats.gz"
 		i=$(expr $i + 1) 
 	done < "$filename"
 
@@ -43,15 +33,11 @@ echo "Input:" $filename
 	#echo $list_array
 	for index in ${seq_array[@]}
 	do
-		cur_set=("${list_array[@]:$index}")
+		cur_set=("${list_array_in[@]:$index}")
 		ldsc_input=$(echo ${cur_set[@]} | tr ' ' ,)
-		cur_pprev_set=("${pprevs[@]:$index}")
-		pprev_input=$(echo ${cur_pprev_set[@]} | tr ' ' ,)
-		cur_sprev_set=("${sprevs[@]:$index}")
-		sprev_input=$(echo ${cur_sprev_set[@]} | tr ' ' ,)
 		
 		## run LDSC
-		/media/cuelee/cue_workspace/software/ldsc/ldsc.py --rg $ldsc_input --ref-ld-chr /media/cuelee/cue_workspace/software/ldsc/ldfile/eur_w_ld_chr/ --w-ld-chr /media/cuelee/cue_workspace/software/ldsc/ldfile/eur_w_ld_chr/ --pop-prev $pprev_input --samp-prev $sprev_input --out ${list_array[$index]}_ldscor
+		$software_dir/ldsc.py --rg $ldsc_input --ref-ld-chr $software_dir/ldfile/eur_w_ld_chr/ --w-ld-chr $software_dir/ldfile/eur_w_ld_chr/ --out ${list_array_out[$index]}_ldscor
 
 		
 	done

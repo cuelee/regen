@@ -1,18 +1,13 @@
-##################
-## Created by Cue Hyunkyu Lee
-## Date Nov 28 2017
-##
-
 ## import modules 
-import os
+import os, time
 import sys
 import numpy as np
 import scipy.stats
 
 sourcerun="/bin/bash -c 'source /home/cuelee/anaconda2/activate ldsc; ";
-print("\n\nThe script name is: {}".format(sys.argv[0]))
-print("Number of arguments is: {}".format(len(sys.argv)),"\n\n")
-#print(" The arguments are: {}".format( str(sys.argv[1:])))
+print(" Cue Hyunkyu Lee: {}.".format(sys.argv[0].split("/")[-1]));
+cur_time = time.strftime("%a, %d %b %Y %H:%M:%S",time.localtime());
+print(" Job started at: {}".format(cur_time));
 
 def LS_z(betas, stders, cor):
 	bes = list(map(float,betas))
@@ -173,7 +168,5 @@ ldsc_output="--out "+output_filename+"_ldsc"
 command_argument_ldsc=ldsc_filepath+ldsc_input+ldsc_ref+ldsc_w+ldsc_output
 print(sourcerun+command_argument_ldsc+"'")
 os.system(sourcerun+command_argument_ldsc+"'")
-
-
 
 

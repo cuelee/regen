@@ -3,9 +3,12 @@
 ## define parameters
 input_dir=$1.rst
 outname=$2
-output_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/cue-work"
-str_targetGC="Summary of Genetic Correlation Results"
-corMat_dir="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/03_CorMat/"
+data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
+result_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/result"
+output_dir="$data_dir/03_genetic_corr"
+corMat_dir="$result_dir/02_corrMats"
+
+mkdir -p $corMat_dir
 
 for filename in "${input_dir}"
 do
@@ -23,7 +26,7 @@ do
 	done < "$filename"
 	
 	module load python/python3.6.5 
-	python3 04_1_process.py ${corMat_dir}${outname}.GenCor ${list_array[@]}
+	python3 04_1_process.py ${corMat_dir}/${outname}.GenCor ${list_array[@]}
 	
 
 done

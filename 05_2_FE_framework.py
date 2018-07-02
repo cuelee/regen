@@ -1,15 +1,12 @@
-print("### Created by Cue Hyunkyu Lee ")
-print("### Nov 23 2017 ")
 ## import modules
-import os
+import os, time
 import sys
 import numpy as np
 import scipy.stats
 
-
-print("The names of the script is: ",sys.argv[0])
-print("Number of argument: ",len(sys.argv),"\n\n")
-#print("The arguments are: ", str(sys.argv[1:]))
+print(" Cue Hyunkyu Lee: {}".format(sys.argv[0].split("/")[-1]));
+cur_time = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime());
+print(" Job started at: {}".format(cur_time));
 
 def LS_z(betas, stders, cor):
         bes = list(map(float,betas))
@@ -32,8 +29,8 @@ out_dir = sys.argv[2]
 meta_dir = sys.argv[3]
 traits = sys.argv[4].split(",")
 ## Actually we don't need the pprevs and sprevs
-pprevs = sys.argv[5].split(",")
-sprevs = sys.argv[6].split(",")
+#pprevs = sys.argv[5].split(",")
+#sprevs = sys.argv[6].split(",")
 RSID = "SNP"
 trait_extension=".intSimple"
 software_dir = ldsc_path
@@ -147,8 +144,10 @@ for i in range(len(traits)-1):
 					newZ=LS_z(betas=betas,stders=[1,1],cor=[[1,0],[0,1]])
 					newP=scipy.stats.distributions.chi2.sf(float(newZ)**2,df=1,loc=0,scale=1)
 					print( " ".join(map(str,trait1_common[aind][:3]))+" "+str(newN)+" "+str(newZ)+" "+str(newP) ,file=outf)
+
 				elif (trait1_common[aind][0]==trait2_common[aind][0] and trait1_common[aind][1]==trait2_common[aind][2] and trait1_common[aind][2]==trait2_common[aind][1]):
 					## if the risk and ref alleles are reversed 
+					print("CHECK input");
 					betas=[float(trait1_common[aind][4]),-float(trait2_common[aind][4])]
 					newN=int(round(float(trait1_common[aind][3]) + float(trait2_common[aind][3]),0))
 					newZ=LS_z(betas=betas,stders=[1,1],cor=[[1,0],[0,1]])
@@ -158,3 +157,6 @@ for i in range(len(traits)-1):
 				else:
 					sys.exit("Something's going wrong during the analysis")
 		outf.close()
+
+cur_time = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime());
+print(" Job finished at: {}".format(cur_time));

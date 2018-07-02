@@ -6,11 +6,13 @@
 ##
 
 ## set parameters
-work_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/cue-work"
-input_dir="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/02_inputs"
-output_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/RE3_input"
-software_dir="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/codes"
-h3snp_file="/media/cuelee/cue_workspace/software/ldsc/ldfile/eur_w_ld_chr/w_hm3.snplist"
+result_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/result"
+data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
+work_dir="$data_dir/02_intcorr"
+input_dir="$result_dir/01_input"
+output_dir="$data_dir/05_reGinput"
+code_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/codes"
+h3snp_file="/media/cuelee/cue_workspace/Pasaniuc_sumstats/Nov2017_Huwenbo/1000G_SNP_CHR_BP_A1_A2.txt"
 
 set_name=$1
 

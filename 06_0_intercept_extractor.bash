@@ -6,14 +6,16 @@
 ##
 
 ## set parameters
-meta_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/meta-work"
+data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
+result_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/result"
+meta_dir="$data_dir/04_FE_inputs"
+cor_dir="$result_dir/02_corr_Mats"
 input_dir=$1.rst
 outname=$2
 str_intercept="Intercept:"
 code_dir="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/codes"
 ldsc_dir="/media/cuelee/cue_workspace/software/ldsc"
-work_dir="/media/cuelee/cue_workspace/Project/RE3_CHL/01work_ldsc/analysis/01_ldsc_cors/cue-work"
-cor_dir="/home/cuelee/Dropbox/Bogdan/Cue_Analysis/mainAnalysis/03_CorMat"
+work_dir="$data_dir/02_intcorr"
 
 module load python/python3.6.5
 

@@ -4,14 +4,9 @@
 ##
 
 ## import 
-import os
-import sys
+import os, time
 import numpy as np
-import math
 
-print("The name of the script is: ", sys.argv[0])
-print("Number of arguments: ", len(sys.argv))
-#print("The arguments are: ", str(sys.argv[1:]))
 output_file = sys.argv[1]
 n_argv = int(sys.argv[2])
 main_argv = list(map(float,sys.argv[3:]))

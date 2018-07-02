@@ -3,14 +3,13 @@
 ## Date Nov 27 2017
 ##
 
-import os
+import os, time
 import sys
 import numpy as np
 import scipy.stats
 
-print("The name of the script is: ", sys.argv[0])
-print("The total number of arguments is: ", len(sys.argv))
-#print("The arguments are: ", str(sys.argv[1:]))
+print(" Cue Hyunkyu Lee: {}".format(sys.argv[0].split("/")[-1]));
+cur_time = time.strftime("%a, %d %b %Y %H:%M:%S",time.localtime());
 
 work_dir=sys.argv[1]
 files=sys.argv[2].split(",")
@@ -38,4 +37,3 @@ for filename in files:
 			print(" ".join(map(str, line_list)),file=fout)
 		fout.close()
 		
-quit()
