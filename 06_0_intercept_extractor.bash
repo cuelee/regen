@@ -9,7 +9,7 @@
 data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
 result_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/result"
 meta_dir="$data_dir/04_FE_inputs"
-cor_dir="$result_dir/02_corr_Mats"
+cor_dir="$result_dir/02_corrMats"
 input_dir=$1.rst
 outname=$2
 str_intercept="Intercept:"

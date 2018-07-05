@@ -14,6 +14,8 @@ output_dir="$data_dir/05_reGinput"
 code_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/codes"
 h3snp_file="/media/cuelee/cue_workspace/Pasaniuc_sumstats/Nov2017_Huwenbo/1000G_SNP_CHR_BP_A1_A2.txt"
 
+mkdir -p $output_dir
+
 set_name=$1
 
 cur_input=$input_dir/$set_name.rst
@@ -26,5 +28,5 @@ done < $cur_input
 read -a traits <<< "$traits_str"
 
 module load python/python3.6.5
-python3 $software_dir/10_1_generate_input.py $work_dir $output_dir/$set_name.zsa $h3snp_file $output_dir/$set_name.info ${traits[@]} ## zsa stands for Z scores array
+python3 $code_dir/10_1_generate_input.py $work_dir $output_dir/$set_name.zsa $h3snp_file $output_dir/$set_name.info ${traits[@]} ## zsa stands for Z scores array
 

@@ -23,12 +23,12 @@ traits = sys.argv[5:]
 tgsnp_data=[]
 tgsnp_list=[]
 tgsnp_fin = open(tgsnp_file,"r")
-frn = False
+frn = True
+tgsnpi = 0 # cur_colnames.index("SNP")
 for line in tgsnp_fin:
 	if (frn==False):
 		frn=True
 		cur_colnames=line.split()
-		tgsnpi = cur_colnames.index("SNP")
 		print("The file {} has SNP index of: {}".format("1000G",tgsnpi))
 		continue
 	split_line=line.split()
