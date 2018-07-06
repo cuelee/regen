@@ -33,18 +33,20 @@ then
 	do
 		tail -n +2 $temp_dir/${group}_${i}.lsss >> $assoc_result_dir/${group}.lsss
 		tail -n +2 $temp_dir/${group}_${i}.lsss.log >> $assoc_result_dir/${group}.lsss.log
-done
+	done
 fi
-#cat $temp_dir/re_argv.txt | parallel --colsep ' ' Rscript {1} {2} {3} {4} {5}
-#cat $temp_dir/${group}_0.ress > $assoc_result_dir/${group}.ress
-#cat $temp_dir/${group}_0.ress.log > $assoc_result_dir/${group}.ress.log
-#if ((expr $2 - 1) > 0)
-#then
-#for i in $(seq 1 1 $(expr $2 - 1))
-#do
-#tail -n +2 $temp_dir/${group}_$i.ress >> $assoc_result_dir/${group}.ress
-#tail -n +2 $temp_dir/${group}_$i.ress.log >> $assoc_result_dir/${group}.ress.log
 
+cat $temp_dir/re_argv.txt | parallel --colsep ' ' Rscript {1} {2} {3} {4} {5}
+cat $temp_dir/${group}_0.ress > $assoc_result_dir/${group}.ress
+cat $temp_dir/${group}_0.ress.log > $assoc_result_dir/${group}.ress.log
+if ((expr $2 - 1) > 0)
+then
+	for i in $(seq 1 1 $(expr $2 - 1))
+	do
+		tail -n +2 $temp_dir/${group}_$i.ress >> $assoc_result_dir/${group}.ress
+		tail -n +2 $temp_dir/${group}_$i.ress.log >> $assoc_result_dir/${group}.ress.log
+	done
+fi
 
 
 ####ETCS
