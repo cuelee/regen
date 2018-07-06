@@ -11,18 +11,21 @@ RECor_dir="$result_dir/02_corrMats/$group.RECor"
 GenCor_dir="$result_dir/02_corrMats/$group.GenCor"
 temp_dir="$reginput_dir/temp"
 
+rm -r $temp_dir
+
 output_dir="$result_dir/03_assoc_result"
 mkdir -p $output_dir
 mkdir -p $temp_dir
+
 
 nl_vec=($(wc -l $reginput_dir/$group.zsa))
 
 module load python/python3.6.5
 python3.6 11_1_inputsep.py $reginput_dir $group $cores $nl_vec $REgcode_dir $RECor_dir $GenCor_dir
 
-
-
 #cat $temp_dir/inputs.txt | parallel --colsep ' ' python {1} {2} {3} {4}
+
+
 
 
 
@@ -37,4 +40,3 @@ python3.6 11_1_inputsep.py $reginput_dir $group $cores $nl_vec $REgcode_dir $REC
 #parallel --jobs 2 -m --header : Rscript {f1} {f2} {f3} ::: f1 count.R ::: f2 100000000 200000000 ::: f3 A B
 
 
-#rm -r $temp_dir
