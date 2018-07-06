@@ -5,6 +5,7 @@ cores=$2
 data_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/analysis"
 result_dir="/media/cuelee/cue_workspace/Cue_sumstats/CTG_CNCR/result"
 REgcode_dir="/home/cuelee/Dropbox/Bogdan/RE3_code/code"
+assoc_result_dir="$result_dir/03_assoc_result"
 
 reginput_dir="$data_dir/05_reGinput"
 RECor_dir="$result_dir/02_corrMats/$group.RECor"
@@ -23,9 +24,25 @@ nl_vec=($(wc -l $reginput_dir/$group.zsa))
 module load python/python3.6.5
 python3.6 11_1_inputsep.py $reginput_dir $group $cores $nl_vec $REgcode_dir $RECor_dir $GenCor_dir
 
-#cat $temp_dir/inputs.txt | parallel --colsep ' ' python {1} {2} {3} {4}
+cat $temp_dir/ls_argv.txt | parallel --colsep ' ' Rscript {1} {2} {3} {4} {5}
+cat $temp_dir/$group_0.lsss > $assoc_result_dir/$group.lsss
+cat $temp_dir/$group_0.lsss.log > $assoc_result_dir/$group.lsss.log
+if ((expr $2 - 1) > 0)
+then
+for i in $seq(1 1 (expr $2 -1))
+do
+tail -n +2 $temp_dir/$group_$i.lsss >> $assoc_result_dir/$group.lsss
+tail -n +2 $temp_dir/$group_$i.lsss.log >> $assoc_result_dir/$group.lsss.log
 
-
+#cat $temp_dir/re_argv.txt | parallel --colsep ' ' Rscript {1} {2} {3} {4} {5}
+#cat $temp_dir/$group_0.ress > $assoc_result_dir/$group.ress
+#cat $temp_dir/$group_0.ress.log > $assoc_result_dir/$group.ress.log
+#if ((expr $2 - 1) > 0)
+#then
+#for i in $seq(1 1 (expr $2 -1))
+#do
+#tail -n +2 $temp_dir/$group_$i.ress >> $assoc_result_dir/$group.ress
+#tail -n +2 $temp_dir/$group_$i.ress.log >> $assoc_result_dir/$group.ress.log
 
 
 
