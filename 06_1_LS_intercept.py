@@ -4,11 +4,17 @@ import sys
 import numpy as np
 import scipy.stats
 
-sourcerun="/bin/bash -c 'source /home/cuelee/anaconda2/activate ldsc; ";
+## This code should be run using python version > python3 
 print(" Cue Hyunkyu Lee: {}.".format(sys.argv[0].split("/")[-1]));
 cur_time = time.strftime("%a, %d %b %Y %H:%M:%S",time.localtime());
 print(" Job started at: {}".format(cur_time));
 
+## parameters
+logistic = dict();
+logistic["True"] = set(["TRUE","True","T","1"]);
+logistic["False"] = set(["FALSE","False","F","0"]);
+
+#Define definitions
 def LS_z(betas, stders, cor):
 	bes = list(map(float,betas))
 	C = np.matrix(cor, dtype=float)
@@ -24,107 +30,122 @@ def LS_z(betas, stders, cor):
 	newz = newx/newstd
 	return(float(newz)) 
 
-
+print(sys.argv);
 ## Set parameters
-ldsc_dir = sys.argv[1]
-meta_dir = sys.argv[2]
-work_dir = sys.argv[3]
-trait1 = sys.argv[4]
-trait2 = sys.argv[5]
-cur_intercept = float(sys.argv[6])
-cur_correlation = cur_intercept - 1
-RSID = "SNP"
-sumstat_ext = ".intSimple"
+meta_dir = sys.argv[1];
+work_dir = sys.argv[2];
+trait1 = sys.argv[3];
+trait2 = sys.argv[4];
+intercept_tf = sys.argv[5];
+if intercept_tf in logistic["True"]:
+	inter_run = True;
+	cur_intercept = float(sys.argv[6]);
+	cur_correlation = cur_intercept - 1
+	output_ext = ".intCorrected";
+elif intercept_tf in logistic["False"]:
+	inter_run = False;
+	cur_correlation = 0;
+	output_ext = "";
+else:
+	 quit("FATAL ERROR: T/F argument is needed(intercept term)");
 
-print("\n Current traits are: {} and {}".format(trait1,trait2))
+RSID = "SNP";
+sumstat_ext = ".intSimple";
+
+print("\n Current traits are: {} and {}".format(trait1,trait2));
 ## main
-trait1_array = []
+trait1_array = [];
 with open (work_dir+"/"+trait1+sumstat_ext,"r") as t1file:
-	frn=False
+	flr=False;
 	for line in t1file:
-		if (frn==False):
-			frn=True
-			colnames1=line.split()
+		if (flr==False):
+			flr=True;
+			colnames1=line.split();
 			continue
-		split_line=line.split()
-		trait1_array.append(split_line)
-t1file.close()
+		split_line=line.split();
+		trait1_array.append(split_line);
+t1file.close();
 
-trait2_array = []
+trait2_array = [];
 with open (work_dir+"/"+trait2+sumstat_ext,"r") as t2file:
-	frn=False
+	flr=False;
 	for line in t2file:
-		if (frn==False):
-			frn=True
-			colnames2=line.split()
+		if (flr==False):
+			flr=True;
+			colnames2=line.split();
 			continue
-		split_line=line.split()
-		trait2_array.append(split_line)
-t2file.close()
+		split_line=line.split();
+		trait2_array.append(split_line);
+t2file.close();
 
 ## get rsid lists 
-rsid_t1 = []
-rsid_t2 = []
+rsid_t1 = [];
+rsid_t2 = [];
 
-rsid_ind = colnames1.index(RSID)
-trait1_sorted = list(sorted(trait1_array, key=lambda x: x[rsid_ind]))
+rsid_ind = colnames1.index(RSID);
+trait1_sorted = list(sorted(trait1_array, key=lambda x: x[rsid_ind]));
 for line in trait1_sorted:
-	rsid_t1.append(line[rsid_ind])
+	rsid_t1.append(line[rsid_ind]);
 
-rsid_ind = colnames2.index(RSID)
-trait2_sorted = list(sorted(trait2_array, key=lambda x: x[rsid_ind]))
+rsid_ind = colnames2.index(RSID);
+trait2_sorted = list(sorted(trait2_array, key=lambda x: x[rsid_ind]));
 for line in trait2_sorted:
-	rsid_t2.append(line[rsid_ind])
+	rsid_t2.append(line[rsid_ind]);
 
+del trait1_array;
+del trait2_array;
 ## perform a sanity check of the RSID lists
 if (len(rsid_t1)==len(set(rsid_t1)) and len(rsid_t2)==len(set(rsid_t2))):
-	print("Both traits passed the sanity checks for the RSIDs")
+	print("Both traits passed the sanity checks for the RSIDs");
 else:
-	sys.exit("It fails the sanity checks for the RSIDS")
+	sys.exit("It fails the sanity checks for the RSIDS");
 
 ## find the common snps
-common_snps_list = list(set(rsid_t1).intersection(rsid_t2))
-sorted_common_snps = list(sorted(common_snps_list))
+common_snps_list = list(set(rsid_t1).intersection(rsid_t2));
+sorted_common_snps = list(sorted(common_snps_list));
 
-trait1_common = []
-ind = 0 
+trait1_common = [];
+ind = 0;
 for line in trait1_sorted:
 	if(line[0]==sorted_common_snps[ind]):
-		trait1_common.append(line)
+		trait1_common.append(line);
 		if (ind < len(sorted_common_snps) - 1):
-			ind = ind + 1
+			ind = ind + 1;
 
-trait2_common = [] 
-ind = 0 
+trait2_common = [];
+ind = 0 ;
 for line in trait2_sorted:
 	if(line[0]==sorted_common_snps[ind]):
-		trait2_common.append(line)
+		trait2_common.append(line);
 		if (ind < len(sorted_common_snps) - 1):
-			ind = ind + 1
+			ind = ind + 1;
+
+del trait1_sorted;
+del trait2_sorted;
 
 ## get rsid lists
-rsid_t1 = []
-rsid_t2 = []
+rsid_t1 = [];
+rsid_t2 = [];
 
-rsid_ind = colnames1.index(RSID)
+rsid_ind = colnames1.index(RSID);
 for line in trait1_common:
-	rsid_t1.append(line[rsid_ind])
+	rsid_t1.append(line[rsid_ind]);
 	
 
-rsid_ind = colnames1.index(RSID)
+rsid_ind = colnames1.index(RSID);
 for line in trait2_common:
-	rsid_t2.append(line[rsid_ind])
+	rsid_t2.append(line[rsid_ind]);
 
 ## check the identity
 if (rsid_t1 == rsid_t2 and rsid_t1 == sorted_common_snps):
-	print("Found {} common snps".format(len(rsid_t1)))
+	print("Found {} common snps".format(len(rsid_t1)));
 
 ## indexing and create
-output_filename = meta_dir+"/"+trait1+"_"+trait2+".intCorrected"
-print("Write the output_file {}_{}.intCorrected".format(trait1,trait2))
+output_filename = meta_dir+"/"+trait1+"_"+trait2+output_ext;
+print("Write the output_file {}_{}{}".format(trait1,trait2,output_ext))
 with open(output_filename,"w") as outf:
 	c_ij=cur_correlation
-	
+	corMat = [[1,c_ij],[c_ij,1]]	
 	if (colnames1==colnames2):
 		print(' '.join(colnames1),file=outf)
 	else:
@@ -135,38 +156,20 @@ with open(output_filename,"w") as outf:
 		if (trait1_common[aind][0]==trait2_common[aind][0] and trait1_common[aind][1]==trait2_common[aind][1] and trait1_common[aind][2]==trait2_common[aind][2]):
 			betas=[float(trait1_common[aind][4]),float(trait2_common[aind][4])]
 			newN=int(round(float(trait1_common[aind][3]) + float(trait2_common[aind][3]),0))
-			newZ=LS_z(betas=betas,stders=[1,1],cor=[[1,c_ij],[c_ij,1]])
+			newZ=LS_z(betas=betas,stders=[1,1],cor=corMat)
 			newP=scipy.stats.distributions.chi2.sf(float(newZ)**2,df=1,loc=0,scale=1)
 			print( " ".join(map(str,trait1_common[aind][:3]))+" "+str(newN)+" "+str(newZ)+" "+str(newP) ,file=outf)
 		elif (trait1_common[aind][0]==trait2_common[aind][0] and trait1_common[aind][1]==trait2_common[aind][2] and trait1_common[aind][2]==trait2_common[aind][1]):
 			## if the risk and ref alleles are reversed 
 			betas=[float(trait1_common[aind][4]),-float(trait2_common[aind][4])]
 			newN=int(round(float(trait1_common[aind][3]) + float(trait2_common[aind][3]),0))
-			newZ=LS_z(betas=betas,stders=[1,1],cor=[[1,c_ij],[c_ij,1]])
+			newZ=LS_z(betas=betas,stders=[1,1],cor=corMat)
 			newP=scipy.stats.distributions.chi2.sf(float(newZ)**2,df=1,loc=0,scale=1)
 			print( " ".join(map(str,trait1_common[aind][:3]))+" "+str(newN)+" "+str(newZ)+" "+str(newP) ,file=outf)
 
 		else:
 			sys.exit("Something's going wrong during the analysis")
 outf.close()
-
-# run Munge_sumstats.py
-munge_filepath=ldsc_dir+"/munge_sumstats.py "
-merge_allele = "--merge-allele "+ldsc_dir+"/ldfile/eur_w_ld_chr/w_hm3.snplist "
-input_munge = "--sumstats "+output_filename+" "
-out_munge = "--out "+output_filename
-command_argument_munge=munge_filepath+input_munge+merge_allele+out_munge
-print(sourcerun+command_argument_munge"'")
-os.system(sourcerun+command_argument_munge+"'")
-
-## run ldsc.py
-ldsc_filepath=ldsc_dir+"/ldsc.py "
-ldsc_input="--h2 "+output_filename+".sumstats.gz "
-ldsc_ref = "--ref-ld-chr "+ldsc_dir+"/ldfile/eur_w_ld_chr/ "
-ldsc_w  = "--w-ld-chr "+ldsc_dir+"/ldfile/eur_w_ld_chr/ "
-ldsc_output="--out "+output_filename+"_ldsc"
-command_argument_ldsc=ldsc_filepath+ldsc_input+ldsc_ref+ldsc_w+ldsc_output
-print(sourcerun+command_argument_ldsc+"'")
-os.system(sourcerun+command_argument_ldsc+"'")
-
+del trait1_common
+del trait2_common
 

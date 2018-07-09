@@ -25,6 +25,7 @@ python3 $code_dir/05_1_data_preprocessing.py $work_dir ${cur_list}
 python3 $code_dir/05_2_FE_framework.py $ldsc_dir $work_dir $meta_dir ${cur_list} 
 module unload python/python3.6.5
 
+exit
 
 source /home/cuelee/anaconda2/bin/activate ldsc
 i=0
